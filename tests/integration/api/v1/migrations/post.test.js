@@ -7,7 +7,8 @@ async function cleanDatabase() {
 beforeAll(cleanDatabase);
 
 test("POST to /api/v1/migrations should return status OK", async () => {
-  const response = await fetch("http://localhost:3000/api/v1/migrations", {
+  const url = "http://localhost:3000/api/v1/migrations";
+  const response = await fetch(url, {
     method: "POST",
   });
   expect(response.status).toBe(201);
@@ -17,7 +18,7 @@ test("POST to /api/v1/migrations should return status OK", async () => {
   expect(Array.isArray(responseBody)).toBe(true);
   expect(responseBody.length).toBeGreaterThan(0);
 
-  const response2 = await fetch("http://localhost:3000/api/v1/migrations", {
+  const response2 = await fetch(url, {
     method: "POST",
   });
   expect(response2.status).toBe(200);
