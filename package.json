@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run service:up && next dev",
+    "dev": "npm run service:up && npm run wait-for-db && npm run migration:up && next dev",
     "service:up": "docker compose -f infra/compose.yaml up -d",
     "service:stop": "docker compose -f infra/compose.yaml stop",
     "service:down": "docker compose -f infra/compose.yaml down",
@@ -14,7 +14,8 @@
     "test:watch": "jest --watchAll --runInBand",
     "migration:create": "node-pg-migrate -m infra/migrations create",
     "migration:up": "node-pg-migrate -m infra/migrations --envPath .env.development up",
-    "migration:down": "node-pg-migrate -m infra/migrations down"
+    "migration:down": "node-pg-migrate -m infra/migrations down",
+    "wait-for-db": "node infra/scripts/wait-for-db.js"
   },
   "author": "",
   "license": "MIT",
