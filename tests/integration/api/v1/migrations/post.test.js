@@ -1,10 +1,10 @@
 import database from "infra/database";
+import orchestrator from "tests/orchestrator";
 
-async function cleanDatabase() {
+beforeAll(async () => {
+  await orchestrator.waitForAllServices();
   await database.query("drop schema public cascade; create schema public;");
-}
-
-beforeAll(cleanDatabase);
+});
 
 test("POST to /api/v1/migrations should return status OK", async () => {
   const url = "http://localhost:3000/api/v1/migrations";
