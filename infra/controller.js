@@ -1,6 +1,7 @@
 import {
   InternalServerError,
   MethodNotAllowedError,
+  NotFoundError,
   ValidationError,
 } from "infra/errors";
 
@@ -10,7 +11,7 @@ export function onNoMatchHandler(request, response) {
 }
 
 export function onErrorHandler(error, request, response) {
-  if (error instanceof ValidationError) {
+  if (isCustomError(error)) {
     return response.status(error.statusCode).json(error);
   }
 
@@ -22,6 +23,10 @@ export function onErrorHandler(error, request, response) {
   console.log(internalServerError);
 
   response.status(internalServerError.statusCode).json(internalServerError);
+
+  function isCustomError(error) {
+    return error instanceof ValidationError || error instanceof NotFoundError;
+  }
 }
 
 export const controller = {
