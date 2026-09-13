@@ -10,19 +10,11 @@ beforeAll(async () => {
 describe("GET /api/v1/users/[username]", () => {
   describe("Anonymous user", () => {
     test("With case match", async () => {
-      const postResponse = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "userName",
-          email: "username@mail.com",
-          password: "password123",
-        }),
+      await orchestrator.createUser({
+        username: "userName",
+        email: "username@mail.com",
+        password: "password123",
       });
-
-      expect(postResponse.status).toBe(201);
 
       const getResponse = await fetch(
         "http://localhost:3000/api/v1/users/userName",
@@ -46,19 +38,11 @@ describe("GET /api/v1/users/[username]", () => {
     });
 
     test("With case mismatch", async () => {
-      const postResponse = await fetch("http://localhost:3000/api/v1/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username: "userName2",
-          email: "username2@mail.com",
-          password: "password123",
-        }),
+      await orchestrator.createUser({
+        username: "userName2",
+        email: "username2@mail.com",
+        password: "password123",
       });
-
-      expect(postResponse.status).toBe(201);
 
       const getResponse = await fetch(
         "http://localhost:3000/api/v1/users/username2",
