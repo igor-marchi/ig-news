@@ -14,7 +14,7 @@ async function findOneByUserName(username) {
       FROM 
         users
       WHERE 
-        username = $1
+        LOWER(username) = LOWER($1)
       LIMIT 1
       ;`,
       values: [username.trim().toLowerCase()],
@@ -55,8 +55,8 @@ async function create(userInputValues) {
         *
       ;`,
       values: [
-        userInputValues.username.trim().toLowerCase(),
-        userInputValues.email.trim().toLowerCase(),
+        userInputValues.username.trim(),
+        userInputValues.email.trim(),
         userInputValues.password,
       ],
     });
@@ -78,7 +78,7 @@ async function validateUniqueEmail(email) {
       FROM 
         users
       WHERE 
-        email = $1
+        LOWER(email) = LOWER($1)
       LIMIT 1
       ;`,
     values: [formattedEmail],
@@ -107,7 +107,7 @@ async function validateUniqueUsername(username) {
       FROM 
         users
       WHERE 
-        username = $1
+        LOWER(username) = LOWER($1)
       LIMIT 1
       ;`,
     values: [formattedUsername],

@@ -135,8 +135,8 @@ describe("PATCH /api/v1/users/[username]", () => {
 
       expect(patchResponseBody).toEqual({
         name: "ValidationError",
-        message: "O username informado já está sendo utilizado",
-        action: "Utilize outro username para realizar esta operação",
+        message: "O email informado já está sendo utilizado",
+        action: "Utilize outro email para realizar esta operação",
         status_code: 400,
       });
     });
