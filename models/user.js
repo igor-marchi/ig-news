@@ -17,7 +17,7 @@ async function findOneByUserName(username) {
         LOWER(username) = LOWER($1)
       LIMIT 1
       ;`,
-      values: [username.trim().toLowerCase()],
+      values: [username?.trim().toLowerCase()],
     });
 
     if (results.rowCount === 0) {
