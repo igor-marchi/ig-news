@@ -1,0 +1,43 @@
+@baseUrl = http://localhost:3000
+@username = user-name
+
+### Health/status da API e do banco de dados
+GET {{baseUrl}}/api/v1/status
+
+### Lista as migrations pendentes
+GET {{baseUrl}}/api/v1/migrations
+
+### Executa as migrations pendentes
+POST {{baseUrl}}/api/v1/migrations
+
+### Cria um usuário
+POST {{baseUrl}}/api/v1/users
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "email": "user@example.com",
+  "password": "change-me"
+}
+
+### Busca um usuário pelo username
+GET {{baseUrl}}/api/v1/users/{{username}}
+
+### Atualiza um usuário pelo username
+PATCH {{baseUrl}}/api/v1/users/{{username}}
+Content-Type: application/json
+
+{
+  "username": "{{username}}",
+  "email": "user@example.com",
+  "password": "change-me"
+}
+
+### Cria uma sessão (login)
+POST {{baseUrl}}/api/v1/sessions
+Content-Type: application/json
+
+{
+  "email": "user@example.com",
+  "password": "change-me"
+}
