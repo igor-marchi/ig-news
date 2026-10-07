@@ -2,6 +2,7 @@ import {
   InternalServerError,
   MethodNotAllowedError,
   NotFoundError,
+  UnauthorizedError,
   ValidationError,
 } from "infra/errors";
 
@@ -16,7 +17,6 @@ export function onErrorHandler(error, request, response) {
   }
 
   const internalServerError = new InternalServerError({
-    statusCode: error.statusCode,
     cause: error,
   });
 
@@ -25,7 +25,11 @@ export function onErrorHandler(error, request, response) {
   response.status(internalServerError.statusCode).json(internalServerError);
 
   function isCustomError(error) {
-    return error instanceof ValidationError || error instanceof NotFoundError;
+    return (
+      error instanceof ValidationError ||
+      error instanceof NotFoundError ||
+      error instanceof UnauthorizedError
+    );
   }
 }
 
