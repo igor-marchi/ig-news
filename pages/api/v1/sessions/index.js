@@ -20,13 +20,7 @@ async function postHandler(request, response) {
 
   const newSession = await session.create(authenticatedUser.id);
 
-  const setCookieHeader = cookie.serialize("session_id", newSession.token, {
-    path: "/",
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    maxAge: session.EXPIRATION_IN_MILLISECONDS / 1000, // Convert milliseconds to seconds
-  });
-  response.setHeader("Set-Cookie", setCookieHeader);
+  controller.setSessionCookie(response, newSession.token);
 
   return response.status(201).json(newSession);
 }
