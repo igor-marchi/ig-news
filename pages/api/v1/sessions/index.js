@@ -1,5 +1,4 @@
 import { createRouter } from "next-connect";
-import * as cookie from "cookie";
 import { controller } from "infra/controller";
 import { authentication } from "models/authentication";
 import { session } from "models/session";
