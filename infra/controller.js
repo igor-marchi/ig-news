@@ -15,6 +15,10 @@ function onNoMatchHandler(request, response) {
 
 function onErrorHandler(error, request, response) {
   if (isCustomError(error)) {
+    if (error instanceof UnauthorizedError) {
+      controller.clearSessionCookie(response);
+    }
+
     return response.status(error.statusCode).json(error);
   }
 
