@@ -131,7 +131,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         username: secondUserName,
         email: createdUser.email,
         password: createdUser.password,
-        features: [],
+        features: ["read:activation_token"],
         created_at: createdUser.created_at.toISOString(),
         updated_at: patchResponseBody.updated_at,
       });
@@ -175,7 +175,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         username: createdUser.username,
         email: secondEmail,
         password: createdUser.password,
-        features: [],
+        features: ["read:activation_token"],
         created_at: createdUser.created_at.toISOString(),
         updated_at: patchResponseBody.updated_at,
       });
@@ -217,7 +217,7 @@ describe("PATCH /api/v1/users/[username]", () => {
         username: createdUser.username,
         email: createdUser.email,
         password: patchResponseBody.password,
-        features: [],
+        features: ["read:activation_token"],
         created_at: createdUser.created_at.toISOString(),
         updated_at: patchResponseBody.updated_at,
       });
