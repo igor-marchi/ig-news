@@ -12,7 +12,7 @@ beforeAll(async () => {
 
 describe("Use case: Registration Flow (all successful)", () => {
   describe("Create user account", () => {
-    let responseBody;
+    let createUserResponseBody;
     let activationTokenId;
 
     test("With unique and valid data", async () => {
@@ -30,15 +30,15 @@ describe("Use case: Registration Flow (all successful)", () => {
 
       expect(response.status).toBe(201);
 
-      responseBody = await response.json();
-      expect(responseBody).toEqual({
-        id: responseBody.id,
+      createUserResponseBody = await response.json();
+      expect(createUserResponseBody).toEqual({
+        id: createUserResponseBody.id,
         username: "user-name",
         email: "username@mail.com",
-        password: responseBody.password,
+        password: createUserResponseBody.password,
         features: ["read:activation_token"],
-        created_at: responseBody.created_at,
-        updated_at: responseBody.updated_at,
+        created_at: createUserResponseBody.created_at,
+        updated_at: createUserResponseBody.updated_at,
       });
     });
 
@@ -57,7 +57,7 @@ describe("Use case: Registration Flow (all successful)", () => {
 
       const activationTokenObject =
         await activation.findOneValidById(activationTokenId);
-      expect(activationTokenObject.user_id).toBe(responseBody.id);
+      expect(activationTokenObject.user_id).toBe(createUserResponseBody.id);
       expect(activationTokenObject.used_at).toBeNull();
     });
 
@@ -78,7 +78,28 @@ describe("Use case: Registration Flow (all successful)", () => {
       expect(activatedUser.features).toEqual(["create:session"]);
     });
 
-    test("Login", async () => {});
+    test("Login", async () => {
+      const createSessionsResponse = await fetch(
+        "http://localhost:3000/api/v1/sessions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: "username@mail.com",
+            password: "password123",
+          }),
+        },
+      );
+
+      expect(createSessionsResponse.status).toBe(201);
+
+      const createSessionsResponseBody = await createSessionsResponse.json();
+      expect(createSessionsResponseBody.user_id).toBe(
+        createUserResponseBody.id,
+      );
+    });
 
     test("Get user information", async () => {});
   });
