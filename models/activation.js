@@ -2,6 +2,7 @@ import database from "infra/database";
 import email from "infra/email.js";
 import { NotFoundError } from "infra/errors";
 import { webserver } from "infra/webserver";
+import { user } from "./user";
 
 const EXPIRATION_IN_MILLISECONDS = 1000 * 60 * 15; // 15 minutes
 
@@ -58,6 +59,34 @@ async function findOneValidById(tokenId) {
   }
 }
 
+async function markTokenAsUsed(token) {
+  const usedToken = await runUpdateQuery(token.id);
+  return usedToken;
+
+  async function runUpdateQuery(tokenId) {
+    const results = await database.query({
+      text: `
+      UPDATE 
+        user_activation_tokens
+      SET 
+        used_at = timezone('utc', now()),
+        updated_at = timezone('utc', now())
+      WHERE 
+        id = $1
+      RETURNING *;
+    `,
+      values: [tokenId],
+    });
+
+    return results.rows[0];
+  }
+}
+
+async function activateUserByUserId(userId) {
+  const activatedUser = await user.setFeatures(userId, ["create:session"]);
+  return activatedUser;
+}
+
 async function sendEmailToUser(user, activationToken) {
   await email.send({
     from: "Ignews <contato@ignews.com.br>",
@@ -75,5 +104,7 @@ Equipe Ignews`,
 export const activation = {
   findOneValidById,
   create,
+  markTokenAsUsed,
+  activateUserByUserId,
   sendEmailToUser,
 };
