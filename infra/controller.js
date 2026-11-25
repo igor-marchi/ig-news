@@ -9,6 +9,7 @@ import {
   ValidationError,
 } from "infra/errors";
 import { user } from "models/user";
+import { authorization } from "models/authorization";
 
 function onNoMatchHandler(request, response) {
   const error = new MethodNotAllowedError();
@@ -98,7 +99,7 @@ function canRequest(feature) {
   return function canRequestMiddleware(request, response, next) {
     const userTryingToRequest = request.context.user;
 
-    if (!userTryingToRequest.features.includes(feature)) {
+    if (!authorization.can(userTryingToRequest, feature)) {
       throw new ForbiddenError({
         message: "Você não possui permissão para executar essa ação.",
         action: `Verifique se o seu usuário possui a feature "${feature}"`,
